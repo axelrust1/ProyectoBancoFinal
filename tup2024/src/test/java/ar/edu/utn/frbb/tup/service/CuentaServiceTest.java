@@ -1,7 +1,9 @@
 package ar.edu.utn.frbb.tup.service;
 
+import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
+import ar.edu.utn.frbb.tup.model.TipoPersona;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
@@ -19,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+
+import java.time.LocalDate;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -72,8 +76,16 @@ public class CuentaServiceTest {
         cuenta.setBalance(2000);
         cuenta.setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE);
 
-        doThrow(TipoCuentaAlreadyExistsException.class).when(clienteService).agregarCuenta(cuenta, 29857643);
-        assertThrows(TipoCuentaAlreadyExistsException.class, () -> cuentaService.darDeAltaCuenta(cuenta, 29857643));
+        Cliente peperino = new Cliente();
+        peperino.setDni(26456439);
+        peperino.setNombre("Pepe");
+        peperino.setApellido("Rino");
+        peperino.setFechaNacimiento(LocalDate.of(1978, 3,25));
+        peperino.setTipoPersona(TipoPersona.PERSONA_FISICA);
+        
+        when(cuentaDao.find(cuenta.getNumeroCuenta())).thenReturn(null);
+        doThrow(TipoCuentaAlreadyExistsException.class).when(clienteService).agregarCuenta(cuenta, peperino.getDni());
+        assertThrows(TipoCuentaAlreadyExistsException.class, () -> cuentaService.darDeAltaCuenta(cuenta, peperino.getDni()));
     }
 
     @Test

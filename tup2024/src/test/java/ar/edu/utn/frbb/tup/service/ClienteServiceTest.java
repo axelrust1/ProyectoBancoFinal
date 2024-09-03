@@ -1,6 +1,11 @@
 package ar.edu.utn.frbb.tup.service;
 
-import ar.edu.utn.frbb.tup.model.*;
+import ar.edu.utn.frbb.tup.controller.ClienteDto;
+import ar.edu.utn.frbb.tup.model.Cliente;
+import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.TipoCuenta;
+import ar.edu.utn.frbb.tup.model.TipoMoneda;
+import ar.edu.utn.frbb.tup.model.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
@@ -15,9 +20,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -37,34 +47,34 @@ public class ClienteServiceTest {
 
     @Test
     public void testClienteMenor18Años() {
-        Cliente clienteMenorDeEdad = new Cliente();
-        clienteMenorDeEdad.setFechaNacimiento(LocalDate.of(2020, 2, 7));
+        ClienteDto clienteMenorDeEdad = new ClienteDto();
+        clienteMenorDeEdad.setFechaNacimiento("2010-05-30");
         assertThrows(IllegalArgumentException.class, () -> clienteService.darDeAltaCliente(clienteMenorDeEdad));
     }
 
     @Test
     public void testClienteSuccess() throws ClienteAlreadyExistsException {
-        Cliente cliente = new Cliente();
-        cliente.setFechaNacimiento(LocalDate.of(1978,3,25));
-        cliente.setDni(29857643);
-        cliente.setTipoPersona(TipoPersona.PERSONA_FISICA);
-        clienteService.darDeAltaCliente(cliente);
+        ClienteDto clienteDto = new ClienteDto();
+        clienteDto.setFechaNacimiento("2003-05-30");
+        clienteDto.setDni(44882713);
+        clienteDto.setTipoPersona("F");
+        Cliente cliente = clienteService.darDeAltaCliente(clienteDto);
 
         verify(clienteDao, times(1)).save(cliente);
     }
 
     @Test
     public void testClienteAlreadyExistsException() throws ClienteAlreadyExistsException {
-        Cliente pepeRino = new Cliente();
-        pepeRino.setDni(26456437);
-        pepeRino.setNombre("Pepe");
-        pepeRino.setApellido("Rino");
-        pepeRino.setFechaNacimiento(LocalDate.of(1978, 3,25));
-        pepeRino.setTipoPersona(TipoPersona.PERSONA_FISICA);
+        ClienteDto clienteDto = new ClienteDto();
+        clienteDto.setDni(44882713);
+        clienteDto.setNombre("Axel");
+        clienteDto.setApellido("Rust");
+        clienteDto.setFechaNacimiento("2003-05-30");
+        clienteDto.setTipoPersona("F");
 
-        when(clienteDao.find(26456437, false)).thenReturn(new Cliente());
+        when(clienteDao.find(44882713, false)).thenReturn(new Cliente());
 
-        assertThrows(ClienteAlreadyExistsException.class, () -> clienteService.darDeAltaCliente(pepeRino));
+        assertThrows(ClienteAlreadyExistsException.class, () -> clienteService.darDeAltaCliente(clienteDto));
     }
 
 
@@ -90,7 +100,7 @@ public class ClienteServiceTest {
         verify(clienteDao, times(1)).save(pepeRino);
 
         assertEquals(1, pepeRino.getCuentas().size());
-        assertEquals(pepeRino, cuenta.getTitular());
+        assertEquals(pepeRino.getDni(), cuenta.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
 
     }
 
@@ -121,7 +131,7 @@ public class ClienteServiceTest {
         assertThrows(TipoCuentaAlreadyExistsException.class, () -> clienteService.agregarCuenta(cuenta2, luciano.getDni()));
         verify(clienteDao, times(1)).save(luciano);
         assertEquals(1, luciano.getCuentas().size());
-        assertEquals(luciano, cuenta.getTitular());
+        assertEquals(luciano.getDni(), cuenta.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
 
     }
 
@@ -154,8 +164,8 @@ public void testAgregarCajaAhorroYCuentaCorriente() throws TipoCuentaAlreadyExis
     assertEquals(2, peperino.getCuentas().size());
     assertTrue(peperino.getCuentas().contains(cajaAhorro));
     assertTrue(peperino.getCuentas().contains(cuentaCorriente));
-    assertEquals(peperino, cajaAhorro.getTitular());
-    assertEquals(peperino, cuentaCorriente.getTitular());
+    assertEquals(peperino.getDni(), cajaAhorro.getTitular()); //comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
+    assertEquals(peperino.getDni(), cuentaCorriente.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
 }
 
 @Test
@@ -187,8 +197,8 @@ public void testAgregarPesosYDolares() throws TipoCuentaAlreadyExistsException {
     assertEquals(2, peperino.getCuentas().size());
     assertTrue(peperino.getCuentas().contains(cajaAhorro));
     assertTrue(peperino.getCuentas().contains(cajaAhorroDolares));
-    assertEquals(peperino, cajaAhorro.getTitular());
-    assertEquals(peperino, cajaAhorroDolares.getTitular());
+    assertEquals(peperino.getDni(), cajaAhorro.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
+    assertEquals(peperino.getDni(), cajaAhorroDolares.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
 }
 
 @Test
@@ -209,10 +219,14 @@ public void testBuscarDniExitoso() {
 }
 
 @Test
-public void testBuscarDniFallido() {
-    when(clienteDao.find(30673123, true)).thenReturn(null);
+    public void testBuscarPorDniFallo() throws ClienteAlreadyExistsException{
+        Cliente peperino = new Cliente();
+        peperino.setDni(26456439);
+        peperino.setNombre("Pepe");
+        peperino.setApellido("Rino");
+        peperino.setFechaNacimiento(LocalDate.of(1978, 3,25));
+        peperino.setTipoPersona(TipoPersona.PERSONA_FISICA);
 
-    assertNull(clienteService.buscarClientePorDni(30673123));
-    verify(clienteDao, times(1)).find(30673123, true);
-}
+        assertThrows(IllegalArgumentException.class, () -> clienteService.buscarClientePorDni(123456789));
+    }
 }

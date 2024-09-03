@@ -3,25 +3,41 @@ package ar.edu.utn.frbb.tup.model;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import ar.edu.utn.frbb.tup.controller.CuentaDto;
+
 public class Cuenta {
     private long numeroCuenta;
     LocalDateTime fechaCreacion;
     int balance;
     TipoCuenta tipoCuenta;
-    Cliente titular;
+    long titular;
     TipoMoneda moneda;
 
     public Cuenta() {
-        this.numeroCuenta = new Random().nextLong();
+        long aux = new Random().nextLong();
+        if (aux<0){
+            numeroCuenta = aux * -1;        //nos aseguramos de que el numero de cuenta random siempre sea positivo
+        } else {
+            numeroCuenta=aux;
+        }
         this.balance = 0;
         this.fechaCreacion = LocalDateTime.now();
     }
 
-    public Cliente getTitular() {
+    public Cuenta(CuentaDto cuentaDto){
+        this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
+        this.moneda = TipoMoneda.fromString(cuentaDto.getMoneda());
+        this.fechaCreacion = LocalDateTime.now();
+        this.balance = 0;
+        this.titular=cuentaDto.getDniTitular(); //aplico al titular el dni
+        this.numeroCuenta = new Random().nextLong();
+    }
+
+    public long getTitular() {
         return titular;
     }
 
-    public void setTitular(Cliente titular) {
+    public void setTitular(long titular) {
         this.titular = titular;
     }
 

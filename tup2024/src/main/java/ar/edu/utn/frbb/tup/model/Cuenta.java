@@ -4,17 +4,19 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
+import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 
 public class Cuenta {
     private long numeroCuenta;
     LocalDateTime fechaCreacion;
-    int balance;
+    double balance;
     TipoCuenta tipoCuenta;
     long titular;
     TipoMoneda moneda;
 
     public Cuenta() {
-        long aux = new Random().nextLong();
+        long aux = new Random().nextLong(); 
         if (aux<0){
             numeroCuenta = aux * -1;        //nos aseguramos de que el numero de cuenta random siempre sea positivo
         } else {
@@ -28,9 +30,14 @@ public class Cuenta {
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
         this.moneda = TipoMoneda.fromString(cuentaDto.getMoneda());
         this.fechaCreacion = LocalDateTime.now();
-        this.balance = 0;
+        this.balance = 50000;
         this.titular=cuentaDto.getDniTitular(); //aplico al titular el dni
-        this.numeroCuenta = new Random().nextLong();
+        long aux = new Random().nextLong(); 
+        if (aux<0){
+            this.numeroCuenta = aux * -1;        //nos aseguramos de que el numero de cuenta random siempre sea positivo
+        } else {
+            this.numeroCuenta=aux;
+        }
     }
 
     public long getTitular() {
@@ -40,7 +47,6 @@ public class Cuenta {
     public void setTitular(long titular) {
         this.titular = titular;
     }
-
 
     public TipoCuenta getTipoCuenta() {
         return tipoCuenta;
@@ -70,22 +76,22 @@ public class Cuenta {
         return this;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public Cuenta setBalance(int balance) {
+    public Cuenta setBalance(double balance) {
         this.balance = balance;
         return this;
     }
 
     public void debitarDeCuenta(int cantidadADebitar) throws NoAlcanzaException, CantidadNegativaException {
         if (cantidadADebitar < 0) {
-            throw new CantidadNegativaException();
+            throw new CantidadNegativaException("No es posible realizar el debito");
         }
 
         if (balance < cantidadADebitar) {
-            throw new NoAlcanzaException();
+            throw new NoAlcanzaException("No hay suficiente saldo.");
         }
         this.balance = this.balance - cantidadADebitar;
     }

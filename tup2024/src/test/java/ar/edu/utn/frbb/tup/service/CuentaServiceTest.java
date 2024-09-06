@@ -4,7 +4,7 @@ import ar.edu.utn.frbb.tup.controller.CuentaDto;
 import ar.edu.utn.frbb.tup.model.*;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
@@ -47,7 +47,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void testCuentaExistente() throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, CuentaNoSoportadaException {
+    public void testCuentaExistente() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cuenta cuentaExistente = new Cuenta();
         CuentaDto cuentaDto = new CuentaDto();
         cuentaDto.setDniTitular(123456789);
@@ -74,7 +74,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void testClienteYaTieneCuentaTipo() throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, CuentaNoSoportadaException {
+    public void testClienteYaTieneCuentaTipo() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cliente peperino = new Cliente();
         peperino.setDni(123456789);
         peperino.setNombre("Pepe");
@@ -94,12 +94,12 @@ public class CuentaServiceTest {
 
 
         when(cuentaDao.find(anyLong())).thenReturn(null);
-        doThrow(TipoCuentaAlreadyExistsException.class).when(clienteService).agregarCuenta(any(Cuenta.class), eq(peperino.getDni()));
-        assertThrows(TipoCuentaAlreadyExistsException.class, () -> cuentaService.darDeAltaCuenta(cuentaDto));
+        doThrow(CuentaAlreadyExistsException.class).when(clienteService).agregarCuenta(any(Cuenta.class), eq(peperino.getDni()));
+        assertThrows(CuentaAlreadyExistsException.class, () -> cuentaService.darDeAltaCuenta(cuentaDto));
     }
 
     @Test
-    public void testCuentaCreadaExitosamente() throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
+    public void testCuentaCreadaExitosamente() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
         Cliente peperino = new Cliente();
         peperino.setDni(123456789);
         peperino.setNombre("Pepe");

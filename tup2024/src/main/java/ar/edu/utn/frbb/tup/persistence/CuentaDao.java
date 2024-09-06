@@ -27,6 +27,15 @@ public class CuentaDao  extends AbstractBaseDao{
         return ((CuentaEntity) getInMemoryDatabase().get(id)).toCuenta();
     }
 
+    public void updateBalance(long id, double nuevoBalance){
+        CuentaEntity cuentaEntity = ((CuentaEntity) getInMemoryDatabase().get(id));     //para actualizar el balance en las transferencias
+
+        if (cuentaEntity!=null){
+            cuentaEntity.setBalance(nuevoBalance);
+            getInMemoryDatabase().put(cuentaEntity.getId(), cuentaEntity);
+        }
+    }
+
     public List<Cuenta> getCuentasByCliente(long dni) {
         List<Cuenta> cuentasDelCliente = new ArrayList<>();
         for (Object object:

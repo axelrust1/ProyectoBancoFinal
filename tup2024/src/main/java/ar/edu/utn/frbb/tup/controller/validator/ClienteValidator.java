@@ -13,6 +13,7 @@ public class ClienteValidator {
         if (!"F".equals(clienteDto.getTipoPersona()) && !"J".equals(clienteDto.getTipoPersona())) {
             throw new IllegalArgumentException("El tipo de persona no es correcto"); //modifico el OR por AND
         }
+        
         try {
             LocalDate.parse(clienteDto.getFechaNacimiento());
         } catch (Exception e) {

@@ -5,7 +5,7 @@ import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.TipoCuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,25 +21,16 @@ public class CuentaService {
     @Autowired
     ClienteService clienteService;
 
-    //Generar casos de test para darDeAltaCuenta
-    //    1 - cuenta existente
-    //    2 - cuenta no soportada
-    //    3 - cliente ya tiene cuenta de ese tipo
-    //    4 - cuenta creada exitosamente
-    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, TipoCuentaAlreadyExistsException, CuentaNoSoportadaException {
+    public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cuenta cuenta = new Cuenta(cuentaDto);
 
-        if(cuentaDao.find(cuenta.getNumeroCuenta()) != null) {
-            throw new CuentaAlreadyExistsException("La cuenta " + cuenta.getNumeroCuenta() + " ya existe.");
+        if(cuentaDao.find(cuenta.getTitular()) != null) {
+            throw new CuentaAlreadyExistsException();
         }
-
-        //Chequear cuentas soportadas por el banco CA$ CC$ CAU$S
-        // if (!tipoCuentaEstaSoportada(cuenta)) {...}
 
        if (!tipoCuentaEstaSoportada(cuenta)) {
-            throw new CuentaNoSoportadaException("El tipo de cuenta " + cuenta.getTipoCuenta() + " no esta soportada.");
-        }
-
+            throw new CuentaNoSoportadaException(cuenta);
+       }
         clienteService.agregarCuenta(cuenta, cuentaDto.getDniTitular());
         cuentaDao.save(cuenta);
         return cuenta;

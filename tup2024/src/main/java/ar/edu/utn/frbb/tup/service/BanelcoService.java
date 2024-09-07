@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 public class BanelcoService {
 
     public boolean realizarTransferenciaDistintoBanco() {
-        boolean estadoTransferencia = Math.random() > 0.9;
+        boolean estadoTransferencia = Math.random() > 0.4;
         return estadoTransferencia;
     }
 }

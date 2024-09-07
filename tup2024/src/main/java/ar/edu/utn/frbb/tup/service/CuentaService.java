@@ -1,6 +1,7 @@
 package ar.edu.utn.frbb.tup.service;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.MovimientoDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
 @Component
 public class CuentaService {
@@ -36,6 +40,7 @@ public class CuentaService {
         return cuenta;
     }
 
+   
     public boolean tipoCuentaEstaSoportada(Cuenta cuenta) {
         return (cuenta.getTipoCuenta() == TipoCuenta.CUENTA_CORRIENTE && cuenta.getMoneda() == TipoMoneda.PESOS) || (cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO && (cuenta.getMoneda() == TipoMoneda.PESOS || cuenta.getMoneda() == TipoMoneda.DOLARES));
     }

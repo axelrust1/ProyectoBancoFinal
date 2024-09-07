@@ -1,10 +1,11 @@
 package ar.edu.utn.frbb.tup.controller;
-
+import java.util.List;
 public class CuentaDto {
 
     private String tipoCuenta;
     private long dniTitular;
     private String moneda;
+    private List<MovimientoDto> movimientos; //agrego una lista con los movimientos de cada cuenta
 
     public long getDniTitular() {
         return dniTitular;
@@ -30,5 +31,11 @@ public class CuentaDto {
         this.tipoCuenta = tipoCuenta;
     }
 
+    public List<MovimientoDto> getMovimientos() {
+        return movimientos;
+    }
 
+    public void setMovimientos(List<MovimientoDto> movimientos) {
+        this.movimientos = movimientos;
+    }
 }

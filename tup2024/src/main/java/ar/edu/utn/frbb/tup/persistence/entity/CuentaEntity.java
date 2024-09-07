@@ -2,11 +2,16 @@ package ar.edu.utn.frbb.tup.persistence.entity;
 
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.Movimiento;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CuentaEntity extends BaseEntity{
     String nombre;
@@ -16,6 +21,7 @@ public class CuentaEntity extends BaseEntity{
     Long titular;
     long numeroCuenta;
     String moneda;
+    private Set<Movimiento> movimientos;
 
     public CuentaEntity(Cuenta cuenta) {
         super(cuenta.getNumeroCuenta());
@@ -25,6 +31,7 @@ public class CuentaEntity extends BaseEntity{
         this.titular = cuenta.getTitular();
         this.fechaCreacion = cuenta.getFechaCreacion();
         this.moneda = cuenta.getMoneda().toString();
+        this.movimientos = new HashSet<>();
     }
 
     public Cuenta toCuenta() {
@@ -35,6 +42,7 @@ public class CuentaEntity extends BaseEntity{
         cuenta.setTipoCuenta(TipoCuenta.valueOf(this.tipoCuenta));
         cuenta.setFechaCreacion(this.fechaCreacion);
         cuenta.setMoneda(TipoMoneda.valueOf(this.moneda));
+        cuenta.setMovimientos(movimientos);
         return cuenta;
     }
 
@@ -84,5 +92,17 @@ public class CuentaEntity extends BaseEntity{
 
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
+    }
+
+    public Set<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(Set<Movimiento> movimientos) {
+        this.movimientos = movimientos;
+    }
+
+    public void agregarMovimiento(Movimiento movimiento) {
+        this.movimientos.add(movimiento);
     }
 }

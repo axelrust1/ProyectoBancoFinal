@@ -1,9 +1,14 @@
 package ar.edu.utn.frbb.tup.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
+import ar.edu.utn.frbb.tup.controller.MovimientoDto;
 import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 
@@ -14,6 +19,8 @@ public class Cuenta {
     TipoCuenta tipoCuenta;
     long titular;
     TipoMoneda moneda;
+    private Set<Movimiento> movimientos = new HashSet<>();
+   
 
     public Cuenta() {
         long aux = new Random().nextLong(); 
@@ -108,5 +115,16 @@ public class Cuenta {
         return numeroCuenta;
     }
 
+    public Set<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(Set<Movimiento> movimientos){
+        this.movimientos=movimientos;
+    }
+
+    public void addMovimiento(Movimiento movimiento) {
+        this.movimientos.add(movimiento);
+    }
 
 }

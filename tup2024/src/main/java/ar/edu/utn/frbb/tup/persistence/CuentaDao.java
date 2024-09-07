@@ -1,6 +1,8 @@
 package ar.edu.utn.frbb.tup.persistence;
 
 import ar.edu.utn.frbb.tup.model.Cuenta;
+import ar.edu.utn.frbb.tup.model.Movimiento;
+import ar.edu.utn.frbb.tup.controller.MovimientoDto;
 import ar.edu.utn.frbb.tup.persistence.entity.ClienteEntity;
 import ar.edu.utn.frbb.tup.persistence.entity.CuentaEntity;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,16 @@ public class CuentaDao  extends AbstractBaseDao{
 
         if (cuentaEntity!=null){
             cuentaEntity.setBalance(nuevoBalance);
+            getInMemoryDatabase().put(cuentaEntity.getId(), cuentaEntity);
+        }
+    }
+
+    public void guardarMovimiento(long id, MovimientoDto movimientoDto){
+        CuentaEntity cuentaEntity = ((CuentaEntity) getInMemoryDatabase().get(id));     //para agregar movimiento a la cuenta
+
+        if (cuentaEntity!=null){
+            Movimiento movimiento1 = new Movimiento(movimientoDto);
+            cuentaEntity.agregarMovimiento(movimiento1);
             getInMemoryDatabase().put(cuentaEntity.getId(), cuentaEntity);
         }
     }

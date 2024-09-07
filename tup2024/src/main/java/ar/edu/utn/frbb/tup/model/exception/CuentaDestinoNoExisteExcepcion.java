@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.model.exception;
 
-public class CuentaDestinoNoExisteExcepcion extends Throwable{
+public class CuentaDestinoNoExisteExcepcion extends Exception {
     public CuentaDestinoNoExisteExcepcion(){
-        throw new IllegalArgumentException ("La cuenta destino no existe.");
+        super("La cuenta de destino no existe.");
     }
 }

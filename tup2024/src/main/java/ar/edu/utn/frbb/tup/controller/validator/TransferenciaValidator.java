@@ -13,7 +13,7 @@ public class TransferenciaValidator {
         if (transferenciaDto.getCuentaOrigen() == 0 || transferenciaDto.getCuentaDestino() == 0) {
             throw new CuentasOrigenDestinoNulas();
         }
-
+        
         if (transferenciaDto.getMonto() <= 0) {
             throw new MontoMenorIgualQueCero();
         }

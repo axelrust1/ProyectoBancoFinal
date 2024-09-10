@@ -92,17 +92,6 @@ public class Cuenta {
         return this;
     }
 
-    public void debitarDeCuenta(int cantidadADebitar) throws NoAlcanzaException, CantidadNegativaException {
-        if (cantidadADebitar < 0) {
-            throw new CantidadNegativaException("No es posible realizar el debito");
-        }
-
-        if (balance < cantidadADebitar) {
-            throw new NoAlcanzaException("No hay suficiente saldo.");
-        }
-        this.balance = this.balance - cantidadADebitar;
-    }
-
     public void setNumeroCuenta(long numeroCuenta) {
         this.numeroCuenta = numeroCuenta;
     }

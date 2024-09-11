@@ -107,7 +107,7 @@ public class TransferenciaServiceTest {
         cuentaOrigen.setBalance(5000);
         Cuenta cuentaDestino = new Cuenta();
         cuentaDestino.setNumeroCuenta(2L);
-        cuentaOrigen.setMoneda(TipoMoneda.fromString("P"));
+        cuentaDestino.setMoneda(TipoMoneda.fromString("P"));
 
         when(cuentaDao.find(1L)).thenReturn(cuentaOrigen);
         when(cuentaDao.find(2L)).thenReturn(cuentaDestino);
@@ -262,7 +262,7 @@ public class TransferenciaServiceTest {
     }
 
     @Test
-    public void testTransferenciaExitosaPesos() throws MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
+    public void testTransferenciaExitosaPesos() throws TipoDeMonedaIncorrectoExcepcion, MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
         Cliente cliente1 = new Cliente();
         cliente1.setBanco("BancoNacion");
         cliente1.setDni(44882713);
@@ -297,7 +297,7 @@ public class TransferenciaServiceTest {
     }
 
     @Test
-    public void testTransferenciaExitosaDolares() throws MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
+    public void testTransferenciaExitosaDolares() throws TipoDeMonedaIncorrectoExcepcion, MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
         Cliente cliente1 = new Cliente();
         cliente1.setBanco("BancoNacion");
         cliente1.setDni(44882713);
@@ -329,5 +329,28 @@ public class TransferenciaServiceTest {
         assertEquals(4500, cuentaOrigen.getBalance());
         assertEquals(10500, cuentaDestino.getBalance()); //verifico si se actualizo el balance de las cuentas
         assertNotNull(transferencia);
+    }
+
+    @Test
+    public void testTipoMonedaTransferenciaIncorrecto() {
+        Cuenta cuentaOrigen = new Cuenta();
+        cuentaOrigen.setNumeroCuenta(1L);
+        cuentaOrigen.setMoneda(TipoMoneda.fromString("P"));
+        cuentaOrigen.setBalance(5000);
+        Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setMoneda(TipoMoneda.fromString("P"));
+        cuentaDestino.setNumeroCuenta(2L);
+        cuentaDestino.setBalance(6000);
+        when(cuentaDao.find(1L)).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(2L)).thenReturn(cuentaDestino);
+        TransferenciaDto transferenciaDto = new TransferenciaDto();
+        transferenciaDto.setCuentaOrigen(1L);
+        transferenciaDto.setCuentaDestino(2L);
+        transferenciaDto.setMoneda("p");
+        transferenciaDto.setMonto(200);
+
+        assertThrows(TipoDeMonedaIncorrectoExcepcion.class, () -> { //verifico q la excepcion se lanze
+            transferenciaService.realizarTransferencia(transferenciaDto);
+        });
     }
 }

@@ -10,6 +10,7 @@ import ar.edu.utn.frbb.tup.controller.MovimientoDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.DepositoRetiro;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
+import ar.edu.utn.frbb.tup.model.exception.CuentaNulaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
@@ -25,9 +26,12 @@ public class DepositoRetiroService {
     @Autowired
     ClienteDao clienteDao;
 
-    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = cuentaDao.find(DepositoRetirodto.getCuenta()); //clono la cuenta en un tipo cuenta nuevo
         DepositoRetiro deposito = new DepositoRetiro(DepositoRetirodto); //creo un nuevo deposito que sera el que retorna
+        if (deposito.getCuenta() == 0 || deposito.getCuenta() == 0) {
+            throw new CuentaNulaExcepcion();
+        }
         if (cuenta==null){
             throw new CuentaOrigenNoExisteExcepcion(); //excepcion por si no exixste la cuenta
         }

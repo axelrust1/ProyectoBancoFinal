@@ -18,6 +18,7 @@ import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedasDistintasTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import ar.edu.utn.frbb.tup.model.exception.SaldoInsuficienteExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.TranferenciaBanelcoFalladaExcepcion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class TransferenciaService {
     @Autowired
     ClienteDao clienteDao;
 
-    public Transferencia realizarTransferencia(TransferenciaDto transferenciaDto) throws MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
+    public Transferencia realizarTransferencia(TransferenciaDto transferenciaDto) throws TipoDeMonedaIncorrectoExcepcion, MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion{
         Cuenta cuenta = cuentaDao.find(transferenciaDto.getCuentaOrigen());
         Cuenta cuenta2 = cuentaDao.find(transferenciaDto.getCuentaDestino());
         Transferencia trans = new Transferencia(transferenciaDto);
@@ -63,18 +64,18 @@ public class TransferenciaService {
         if (transferenciaDto.getCuentaOrigen()==(transferenciaDto.getCuentaDestino())) {
             throw new CuentaOrigenyDestinoIguales();
         }
-        
-        if (!(TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta.getMoneda()))){ //CONVIERTO EL STRING EN UN ENUM PARA LA COMPARACION CON LA CUENTA
-                throw new MonedaErroneaTransferenciaExcepcion();
-        } 
-
-        if (!(TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta2.getMoneda()))){ //CONVIERTO EL STRING EN UN ENUM PARA LA COMPARACION CON LA CUENTA
-            throw new MonedaErroneaTransferenciaExcepcion();
-        } 
+        if (!"PESOS".equals(trans.getTipoMoneda()) && !"DOLARES".equals(trans.getTipoMoneda())) {
+            throw new TipoDeMonedaIncorrectoExcepcion();
+        }
 
         if(!cuenta.getMoneda().equals(cuenta2.getMoneda())){
             throw new MonedasDistintasTransferenciaExcepcion();
         }
+
+        if (!TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta.getMoneda()) || !TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta2.getMoneda())){
+            throw new MonedaErroneaTransferenciaExcepcion();
+        }
+    
         //aca ya verificamos que las dos cuentas existen, solamente hay que chequear los bancos
         Cliente cliente = clienteDao.find(cuenta.getTitular(), true); //creamos los clientes para evaluar si los bancos son los mismos
         Cliente cliente2 = clienteDao.find(cuenta2.getTitular(), true);

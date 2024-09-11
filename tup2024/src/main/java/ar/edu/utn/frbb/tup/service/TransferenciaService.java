@@ -42,7 +42,7 @@ public class TransferenciaService {
         Cuenta cuenta2 = cuentaDao.find(transferenciaDto.getCuentaDestino());
         Transferencia trans = new Transferencia(transferenciaDto);
         if (trans.getTipoMoneda() == null || trans.getTipoMoneda().isEmpty()) {
-            throw new MonedaVaciaExcepcion();
+            throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
         }
         if (transferenciaDto.getCuentaOrigen() == 0 || transferenciaDto.getCuentaDestino() == 0) {
             throw new CuentasOrigenDestinoNulas();

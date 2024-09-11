@@ -1,7 +1,7 @@
 package ar.edu.utn.frbb.tup.model.exception;
 
-public class CuentaAlreadyExistsException extends Throwable {
+public class CuentaAlreadyExistsException extends Exception {
     public CuentaAlreadyExistsException() {
-        throw new IllegalArgumentException("El cliente ya tiene una cuenta de este tipo");
+        super("El cliente ya tiene una cuenta de este tipo");
     }
 }

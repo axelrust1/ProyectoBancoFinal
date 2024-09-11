@@ -23,7 +23,7 @@ public class TransferenciaValidator {
         }
 
         if (transferenciaDto.getMoneda() == null || transferenciaDto.getMoneda().isEmpty()) {
-            throw new MonedaVaciaExcepcion();
+            throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
         }
         
     }

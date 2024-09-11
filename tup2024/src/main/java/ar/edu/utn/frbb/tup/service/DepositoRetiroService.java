@@ -14,6 +14,7 @@ import ar.edu.utn.frbb.tup.model.exception.CuentaNulaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
+import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 
@@ -26,7 +27,7 @@ public class DepositoRetiroService {
     @Autowired
     ClienteDao clienteDao;
 
-    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = cuentaDao.find(DepositoRetirodto.getCuenta()); //clono la cuenta en un tipo cuenta nuevo
         DepositoRetiro deposito = new DepositoRetiro(DepositoRetirodto); //creo un nuevo deposito que sera el que retorna
         if (deposito.getCuenta() == 0 || deposito.getCuenta() == 0) {
@@ -34,6 +35,10 @@ public class DepositoRetiroService {
         }
         if (cuenta==null){
             throw new CuentaOrigenNoExisteExcepcion(); //excepcion por si no exixste la cuenta
+        }
+
+        if (!"PESOS".equals(deposito.getTipoMoneda()) && !"DOLARES".equals(deposito.getTipoMoneda())) {
+            throw new TipoDeMonedaIncorrectoExcepcion();
         }
         if (!(TipoMoneda.valueOf(deposito.getTipoMoneda()).equals(cuenta.getMoneda()))){ //CONVIERTO EL STRING EN UN ENUM PARA LA COMPARACION CON LA CUENTA
                 throw new MonedaErroneaTransferenciaExcepcion(); //excepcion por si es distinta moneda
@@ -46,11 +51,14 @@ public class DepositoRetiroService {
         return deposito;
     }
 
-    public DepositoRetiro realizarRetiro(DepositoRetiroDto DepositoRetirodto) throws NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public DepositoRetiro realizarRetiro(DepositoRetiroDto DepositoRetirodto) throws TipoDeMonedaIncorrectoExcepcion, NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = cuentaDao.find(DepositoRetirodto.getCuenta());
         DepositoRetiro retiro = new DepositoRetiro(DepositoRetirodto);
         if (cuenta==null){
             throw new CuentaOrigenNoExisteExcepcion(); 
+        }
+        if (!"PESOS".equals(retiro.getTipoMoneda()) && !"DOLARES".equals(retiro.getTipoMoneda())) {
+            throw new TipoDeMonedaIncorrectoExcepcion();
         }
         if (!(TipoMoneda.valueOf(retiro.getTipoMoneda()).equals(cuenta.getMoneda()))){ //CONVIERTO EL STRING EN UN ENUM PARA LA COMPARACION CON LA CUENTA
                 throw new MonedaErroneaTransferenciaExcepcion();

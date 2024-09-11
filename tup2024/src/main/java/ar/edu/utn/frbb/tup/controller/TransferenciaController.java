@@ -58,7 +58,7 @@ public class TransferenciaController {
             depositoRetiroValidator.validate(depositoRetiroDto);
             depositoRetiroService.realizarDeposito(depositoRetiroDto);
             return new TransferMensaje("EXITOSO", "Deposito Exitoso");
-        } catch (CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
+        } catch (TipoDeMonedaIncorrectoExcepcion | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }
@@ -69,7 +69,7 @@ public class TransferenciaController {
             depositoRetiroValidator.validate(depositoRetiroDto);
             depositoRetiroService.realizarRetiro(depositoRetiroDto);
             return new TransferMensaje("EXITOSO", "Retiro Exitoso");
-        } catch (NoAlcanzaException | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
+        } catch (TipoDeMonedaIncorrectoExcepcion | NoAlcanzaException | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }

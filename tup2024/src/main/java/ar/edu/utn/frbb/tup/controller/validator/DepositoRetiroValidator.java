@@ -19,7 +19,7 @@ public class DepositoRetiroValidator {
         }
 
         if (depositoRetiroDto.getMoneda() == null || depositoRetiroDto.getMoneda().isEmpty()) {
-            throw new MonedaVaciaExcepcion();
+            throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
         }
         
     }

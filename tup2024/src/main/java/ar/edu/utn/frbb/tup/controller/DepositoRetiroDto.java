@@ -9,7 +9,7 @@ public class DepositoRetiroDto {
         return cuenta;
     }
 
-    public void setCuenta(){
+    public void setCuenta(long cuenta){
         this.cuenta=cuenta;
     }
     public int getMonto(){

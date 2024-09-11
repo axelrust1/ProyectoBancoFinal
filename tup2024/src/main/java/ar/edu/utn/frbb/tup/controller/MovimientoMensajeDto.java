@@ -1,9 +1,5 @@
 package ar.edu.utn.frbb.tup.controller;
 
-import java.util.List;
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import ar.edu.utn.frbb.tup.model.Movimiento;
 

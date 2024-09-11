@@ -1,6 +1,5 @@
 package ar.edu.utn.frbb.tup.controller;
 
-import ar.edu.utn.frbb.tup.model.Cuenta;
 
 public class TransferenciaDto {
     private long cuentaOrigen;
@@ -12,7 +11,7 @@ public class TransferenciaDto {
         return cuentaOrigen;
     }
 
-    public void setCuentaOrigen(){
+    public void setCuentaOrigen(long cuentaOrigen){
         this.cuentaOrigen=cuentaOrigen;
     }
 
@@ -20,7 +19,7 @@ public class TransferenciaDto {
         return cuentaDestino;
     }
 
-    public void setCuentaDestino(){
+    public void setCuentaDestino(long cuentaDestino){
         this.cuentaDestino=cuentaDestino;
     }
 

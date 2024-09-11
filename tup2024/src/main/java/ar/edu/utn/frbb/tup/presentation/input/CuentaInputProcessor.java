@@ -1,12 +1,8 @@
 package ar.edu.utn.frbb.tup.presentation.input;
 
-import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
-import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import ar.edu.utn.frbb.tup.service.CuentaService;
@@ -56,6 +52,6 @@ public class CuentaInputProcessor extends BaseInputProcessor{
         TipoMoneda moneda = tipoMoneda.equals("P") ? TipoMoneda.PESOS : TipoMoneda.DOLARES;
         cuenta.setMoneda(moneda);
 
-        cuenta.setFechaCreacion(LocalDate.now().atStartOfDay());
+        cuenta.setFechaCreacion(LocalDate.now());
     }
 }

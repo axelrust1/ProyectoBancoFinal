@@ -1,10 +1,8 @@
 package ar.edu.utn.frbb.tup.controller.validator;
-import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
-import ar.edu.utn.frbb.tup.model.Cuenta;
 
 
 @Component

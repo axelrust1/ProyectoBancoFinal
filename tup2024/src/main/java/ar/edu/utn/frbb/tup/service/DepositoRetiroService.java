@@ -10,14 +10,9 @@ import ar.edu.utn.frbb.tup.controller.MovimientoDto;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.DepositoRetiro;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
-import ar.edu.utn.frbb.tup.model.Transferencia;
-import ar.edu.utn.frbb.tup.model.exception.CuentaDestinoNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
-import ar.edu.utn.frbb.tup.model.exception.MonedasDistintasTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
-import ar.edu.utn.frbb.tup.model.exception.SaldoInsuficienteExcepcion;
-import ar.edu.utn.frbb.tup.model.exception.TranferenciaBanelcoFalladaExcepcion;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 

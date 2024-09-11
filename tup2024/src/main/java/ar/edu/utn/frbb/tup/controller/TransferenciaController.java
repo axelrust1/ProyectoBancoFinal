@@ -1,5 +1,4 @@
 package ar.edu.utn.frbb.tup.controller;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,7 @@ import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenyDestinoIguales;
 import ar.edu.utn.frbb.tup.model.exception.CuentasOrigenDestinoNulas;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
-import ar.edu.utn.frbb.tup.model.exception.MonedaVacia;
+import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedasDistintasTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
@@ -47,7 +46,7 @@ public class TransferenciaController {
             transferenciaValidator.validate(transferenciaDto);
             transferenciaService.realizarTransferencia(transferenciaDto);
             return new TransferMensaje("EXITOSA", "Transferencia exitosa");
-     } catch (CuentaOrigenNoExisteExcepcion | MonedasDistintasTransferenciaExcepcion | MonedaErroneaTransferenciaExcepcion | SaldoInsuficienteExcepcion | TranferenciaBanelcoFalladaExcepcion | CuentaDestinoNoExisteExcepcion | CuentasOrigenDestinoNulas | MontoMenorIgualQueCero | CuentaOrigenyDestinoIguales | MonedaVacia excepcion) { //multicatch
+     } catch (CuentaOrigenNoExisteExcepcion | MonedasDistintasTransferenciaExcepcion | MonedaErroneaTransferenciaExcepcion | SaldoInsuficienteExcepcion | TranferenciaBanelcoFalladaExcepcion | CuentaDestinoNoExisteExcepcion | CuentasOrigenDestinoNulas | MontoMenorIgualQueCero | CuentaOrigenyDestinoIguales | MonedaVaciaExcepcion excepcion) { //multicatch
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }
@@ -58,7 +57,7 @@ public class TransferenciaController {
             depositoRetiroValidator.validate(depositoRetiroDto);
             depositoRetiroService.realizarDeposito(depositoRetiroDto);
             return new TransferMensaje("EXITOSO", "Deposito Exitoso");
-        } catch (CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVacia | MontoMenorIgualQueCero excepcion ){
+        } catch (CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }
@@ -69,7 +68,7 @@ public class TransferenciaController {
             depositoRetiroValidator.validate(depositoRetiroDto);
             depositoRetiroService.realizarRetiro(depositoRetiroDto);
             return new TransferMensaje("EXITOSO", "Retiro Exitoso");
-        } catch (NoAlcanzaException | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVacia | MontoMenorIgualQueCero excepcion ){
+        } catch (NoAlcanzaException | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }

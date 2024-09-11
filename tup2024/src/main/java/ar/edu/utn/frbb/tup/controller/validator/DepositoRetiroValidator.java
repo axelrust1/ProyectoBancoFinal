@@ -3,14 +3,13 @@ package ar.edu.utn.frbb.tup.controller.validator;
 import org.springframework.stereotype.Component;
 
 import ar.edu.utn.frbb.tup.controller.DepositoRetiroDto;
-import ar.edu.utn.frbb.tup.controller.TransferenciaDto;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNulaExcepcion;
-import ar.edu.utn.frbb.tup.model.exception.MonedaVacia;
+import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 
 @Component
 public class DepositoRetiroValidator {
-    public void validate(DepositoRetiroDto depositoRetiroDto) throws CuentaNulaExcepcion, MontoMenorIgualQueCero, MonedaVacia {
+    public void validate(DepositoRetiroDto depositoRetiroDto) throws CuentaNulaExcepcion, MontoMenorIgualQueCero, MonedaVaciaExcepcion {
         if (depositoRetiroDto.getCuenta() == 0 || depositoRetiroDto.getCuenta() == 0) {
             throw new CuentaNulaExcepcion();
         }
@@ -20,7 +19,7 @@ public class DepositoRetiroValidator {
         }
 
         if (depositoRetiroDto.getMoneda() == null || depositoRetiroDto.getMoneda().isEmpty()) {
-            throw new MonedaVacia();
+            throw new MonedaVaciaExcepcion();
         }
         
     }

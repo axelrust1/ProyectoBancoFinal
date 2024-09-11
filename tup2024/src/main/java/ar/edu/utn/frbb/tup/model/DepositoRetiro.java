@@ -1,7 +1,6 @@
 package ar.edu.utn.frbb.tup.model;
 
 import ar.edu.utn.frbb.tup.controller.DepositoRetiroDto;
-import ar.edu.utn.frbb.tup.model.Cuenta;
 
 public class DepositoRetiro {
 

@@ -1,27 +1,23 @@
 package ar.edu.utn.frbb.tup.persistence.entity;
 
-import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.Movimiento;
 import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
-import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
+import java.time.LocalDate;
 
 public class CuentaEntity extends BaseEntity{
     String nombre;
-    LocalDateTime fechaCreacion;
+    LocalDate fechaCreacion;
     double balance;
     String tipoCuenta;
     Long titular;
     long numeroCuenta;
     String moneda;
-    private Set<Movimiento> movimientos;
+    private Set<Movimiento> movimientos; //agrego un hash set para almarcenar los movimientos en cada cuenta
 
     public CuentaEntity(Cuenta cuenta) {
         super(cuenta.getNumeroCuenta());
@@ -31,7 +27,7 @@ public class CuentaEntity extends BaseEntity{
         this.titular = cuenta.getTitular();
         this.fechaCreacion = cuenta.getFechaCreacion();
         this.moneda = cuenta.getMoneda().toString();
-        this.movimientos = new HashSet<>();
+        this.movimientos = new HashSet<>();//agrego un hash set para almarcenar los movimientos en cada cuenta
     }
 
     public Cuenta toCuenta() {
@@ -42,7 +38,7 @@ public class CuentaEntity extends BaseEntity{
         cuenta.setTipoCuenta(TipoCuenta.valueOf(this.tipoCuenta));
         cuenta.setFechaCreacion(this.fechaCreacion);
         cuenta.setMoneda(TipoMoneda.valueOf(this.moneda));
-        cuenta.setMovimientos(movimientos);
+        cuenta.setMovimientos(movimientos);//agrego un hash set para almarcenar los movimientos en cada cuenta
         return cuenta;
     }
 
@@ -54,11 +50,11 @@ public class CuentaEntity extends BaseEntity{
         this.nombre = nombre;
     }
 
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

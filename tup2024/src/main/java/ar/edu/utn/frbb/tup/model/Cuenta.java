@@ -1,20 +1,15 @@
 package ar.edu.utn.frbb.tup.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Random;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
-import ar.edu.utn.frbb.tup.controller.MovimientoDto;
-import ar.edu.utn.frbb.tup.model.exception.CantidadNegativaException;
-import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 
 public class Cuenta {
     private long numeroCuenta;
-    LocalDateTime fechaCreacion;
+    LocalDate fechaCreacion;
     double balance;
     TipoCuenta tipoCuenta;
     long titular;
@@ -30,13 +25,13 @@ public class Cuenta {
             numeroCuenta=aux;
         }
         this.balance = 0;
-        this.fechaCreacion = LocalDateTime.now();
+        this.fechaCreacion = LocalDate.now();
     }
 
     public Cuenta(CuentaDto cuentaDto){
         this.tipoCuenta = TipoCuenta.fromString(cuentaDto.getTipoCuenta());
         this.moneda = TipoMoneda.fromString(cuentaDto.getMoneda());
-        this.fechaCreacion = LocalDateTime.now();
+        this.fechaCreacion = LocalDate.now();
         this.balance = 50000;
         this.titular=cuentaDto.getDniTitular(); //aplico al titular el dni
         long aux = new Random().nextLong(); 
@@ -74,11 +69,11 @@ public class Cuenta {
     }
 
 
-    public LocalDateTime getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public Cuenta setFechaCreacion(LocalDateTime fechaCreacion) {
+    public Cuenta setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
         return this;
     }

@@ -7,6 +7,7 @@ import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.TipoPersona;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.junit.jupiter.api.BeforeAll;
@@ -78,7 +79,7 @@ public class ClienteServiceTest {
 
 
     @Test
-    public void testAgregarCuentaAClienteSuccess() throws CuentaAlreadyExistsException {
+    public void testAgregarCuentaAClienteSuccess() throws ClienteNoExisteException, CuentaAlreadyExistsException {
         Cliente pepeRino = new Cliente();
         pepeRino.setDni(26456439);
         pepeRino.setNombre("Pepe");
@@ -104,7 +105,7 @@ public class ClienteServiceTest {
 
 
     @Test
-    public void testAgregarCuentaAClienteDuplicada() throws CuentaAlreadyExistsException {
+    public void testAgregarCuentaAClienteDuplicada() throws ClienteNoExisteException, CuentaAlreadyExistsException {
         Cliente luciano = new Cliente();
         luciano.setDni(26456439);
         luciano.setNombre("Pepe");
@@ -134,7 +135,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-public void testAgregarCajaAhorroYCuentaCorriente() throws CuentaAlreadyExistsException {
+public void testAgregarCajaAhorroYCuentaCorriente() throws ClienteNoExisteException, CuentaAlreadyExistsException {
     Cliente peperino = new Cliente();
     peperino.setDni(26456439);
     peperino.setNombre("Pepe");
@@ -167,7 +168,7 @@ public void testAgregarCajaAhorroYCuentaCorriente() throws CuentaAlreadyExistsEx
 }
 
 @Test
-public void testAgregarPesosYDolares() throws CuentaAlreadyExistsException {
+public void testAgregarPesosYDolares() throws ClienteNoExisteException, CuentaAlreadyExistsException {
     Cliente peperino = new Cliente();
     peperino.setDni(26456439);
     peperino.setNombre("Pepe");
@@ -200,7 +201,7 @@ public void testAgregarPesosYDolares() throws CuentaAlreadyExistsException {
 }
 
 @Test
-public void testBuscarDniExitoso() {
+public void testBuscarDniExitoso()  throws ClienteNoExisteException{
     Cliente peperino = new Cliente();
     peperino.setDni(26456439);
     peperino.setNombre("Pepe");

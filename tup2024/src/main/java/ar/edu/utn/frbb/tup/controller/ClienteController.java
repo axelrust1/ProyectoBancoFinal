@@ -3,6 +3,7 @@ package ar.edu.utn.frbb.tup.controller;
 import ar.edu.utn.frbb.tup.controller.validator.ClienteValidator;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{dni}")
-    public Cliente buscarClientePorDni(@PathVariable long dni) {
+    public Cliente buscarClientePorDni(@PathVariable long dni) throws ClienteNoExisteException{
         return clienteService.buscarClientePorDni(dni);
     }
 }

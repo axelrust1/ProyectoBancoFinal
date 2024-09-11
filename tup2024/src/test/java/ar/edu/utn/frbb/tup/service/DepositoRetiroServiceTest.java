@@ -13,6 +13,8 @@ import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNulaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
@@ -56,7 +58,7 @@ public class DepositoRetiroServiceTest {
     }
 
     @Test
-    public void testRealizarDepositoExitoso() throws TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public void testRealizarDepositoExitoso() throws MontoMenorIgualQueCero, MonedaVaciaExcepcion, TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(1L);
         cuenta.setBalance(5000);
@@ -76,6 +78,23 @@ public class DepositoRetiroServiceTest {
     }
 
     @Test
+    public void testDepositoConMontoNegativo() throws MontoMenorIgualQueCero, TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    Cuenta cuenta = new Cuenta();
+    cuenta.setNumeroCuenta(1L);
+    cuenta.setBalance(5000);
+    cuenta.setMoneda(TipoMoneda.PESOS);
+    when(cuentaDao.find(1L)).thenReturn(cuenta);
+    DepositoRetiroDto depositoDto = new DepositoRetiroDto();
+    depositoDto.setCuenta(1L);
+    depositoDto.setMonto(-1000); // Monto negativo
+    depositoDto.setMoneda("PESOS");
+
+    assertThrows(MontoMenorIgualQueCero.class, () -> {
+        depositoRetiroService.realizarDeposito(depositoDto);
+    });
+}
+
+    @Test
     public void testRealizarDepositoConCuentaNula() {
         DepositoRetiroDto depositoDto = new DepositoRetiroDto();
         depositoDto.setCuenta(0); // Cuenta nula
@@ -86,6 +105,22 @@ public class DepositoRetiroServiceTest {
             depositoRetiroService.realizarDeposito(depositoDto);
         });
     }
+
+    @Test
+    public void testDepositoConMonedaVacia() throws MontoMenorIgualQueCero, TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion{
+    Cuenta cuenta = new Cuenta();
+    cuenta.setNumeroCuenta(1L);
+    cuenta.setBalance(5000);
+    cuenta.setMoneda(TipoMoneda.PESOS);
+    when(cuentaDao.find(1L)).thenReturn(cuenta);
+    DepositoRetiroDto depositoDto = new DepositoRetiroDto();
+    depositoDto.setCuenta(1L);
+    depositoDto.setMonto(1000);
+    depositoDto.setMoneda(""); // Moneda vacía
+    assertThrows(MonedaVaciaExcepcion.class, () -> {
+        depositoRetiroService.realizarDeposito(depositoDto);
+    });
+}
 
     @Test
     public void testRealizarDepositoCuentaNoExiste() {
@@ -140,7 +175,7 @@ public class DepositoRetiroServiceTest {
     }
 
     @Test
-public void testRealizarRetiroExitoso() throws TipoDeMonedaIncorrectoExcepcion, NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public void testRealizarRetiroExitoso() throws MontoMenorIgualQueCero, MonedaVaciaExcepcion, TipoDeMonedaIncorrectoExcepcion, NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
     Cuenta cuenta = new Cuenta();
     cuenta.setNumeroCuenta(1L);
     cuenta.setBalance(5000);
@@ -161,6 +196,22 @@ public void testRealizarRetiroExitoso() throws TipoDeMonedaIncorrectoExcepcion, 
 }
 
 @Test
+    public void testRetiroConMontoNegativo() throws MontoMenorIgualQueCero, TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion{
+    Cuenta cuenta = new Cuenta();
+    cuenta.setNumeroCuenta(1L);
+    cuenta.setBalance(5000);
+    cuenta.setMoneda(TipoMoneda.PESOS);
+    when(cuentaDao.find(1L)).thenReturn(cuenta);
+    DepositoRetiroDto retiroDto = new DepositoRetiroDto();
+    retiroDto.setCuenta(1L);
+    retiroDto.setMonto(-500); // Monto negativo
+    retiroDto.setMoneda("PESOS");
+
+    assertThrows(MontoMenorIgualQueCero.class, () -> {
+        depositoRetiroService.realizarRetiro(retiroDto);
+    });
+}
+@Test
     public void testCuentaNoExisteRetiro() {
         when(cuentaDao.find(1L)).thenReturn(null);//la cuenta no existe, por lo tanto devuelve null
 
@@ -170,7 +221,7 @@ public void testRealizarRetiroExitoso() throws TipoDeMonedaIncorrectoExcepcion, 
         retiroDto.setMoneda("PESOS");
 
         assertThrows(CuentaOrigenNoExisteExcepcion.class, () -> {
-            depositoRetiroService.realizarDeposito(retiroDto);
+            depositoRetiroService.realizarRetiro(retiroDto);
         });
     }
 

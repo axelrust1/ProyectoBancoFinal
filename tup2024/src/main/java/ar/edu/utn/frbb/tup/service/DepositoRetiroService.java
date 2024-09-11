@@ -13,6 +13,8 @@ import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNulaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaOrigenNoExisteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
@@ -27,9 +29,15 @@ public class DepositoRetiroService {
     @Autowired
     ClienteDao clienteDao;
 
-    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public DepositoRetiro realizarDeposito(DepositoRetiroDto DepositoRetirodto) throws MontoMenorIgualQueCero, MonedaVaciaExcepcion, TipoDeMonedaIncorrectoExcepcion, CuentaNulaExcepcion, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = cuentaDao.find(DepositoRetirodto.getCuenta()); //clono la cuenta en un tipo cuenta nuevo
         DepositoRetiro deposito = new DepositoRetiro(DepositoRetirodto); //creo un nuevo deposito que sera el que retorna
+        if (deposito.getTipoMoneda() == null || deposito.getTipoMoneda().isEmpty()) {
+            throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
+        }
+        if (deposito.getMonto()<=0){
+            throw new MontoMenorIgualQueCero();
+        }
         if (deposito.getCuenta() == 0 || deposito.getCuenta() == 0) {
             throw new CuentaNulaExcepcion();
         }
@@ -51,9 +59,16 @@ public class DepositoRetiroService {
         return deposito;
     }
 
-    public DepositoRetiro realizarRetiro(DepositoRetiroDto DepositoRetirodto) throws TipoDeMonedaIncorrectoExcepcion, NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
+    public DepositoRetiro realizarRetiro(DepositoRetiroDto DepositoRetirodto) throws MontoMenorIgualQueCero, MonedaVaciaExcepcion, TipoDeMonedaIncorrectoExcepcion, NoAlcanzaException, CuentaOrigenNoExisteExcepcion, MonedaErroneaTransferenciaExcepcion {
         Cuenta cuenta = cuentaDao.find(DepositoRetirodto.getCuenta());
         DepositoRetiro retiro = new DepositoRetiro(DepositoRetirodto);
+        if (retiro.getTipoMoneda() == null || retiro.getTipoMoneda().isEmpty()) {
+            throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
+        }
+
+        if (retiro.getMonto()<=0){
+            throw new MontoMenorIgualQueCero();
+        }
         if (cuenta==null){
             throw new CuentaOrigenNoExisteExcepcion(); 
         }

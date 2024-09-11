@@ -5,6 +5,7 @@ import ar.edu.utn.frbb.tup.model.*;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import org.junit.jupiter.api.BeforeAll;
@@ -73,7 +74,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void testClienteYaTieneCuentaTipo() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
+    public void testClienteYaTieneCuentaTipo() throws ClienteNoExisteException, CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cliente peperino = new Cliente();
         peperino.setDni(123456789);
         peperino.setNombre("Pepe");
@@ -98,7 +99,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void testCuentaCreadaExitosamente() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
+    public void testCuentaCreadaExitosamente() throws ClienteNoExisteException,CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
         Cliente peperino = new Cliente();
         peperino.setDni(123456789);
         peperino.setNombre("Pepe");
@@ -112,6 +113,28 @@ public class CuentaServiceTest {
         when(cuentaDao.find(anyLong())).thenReturn(null);
         cuentaService.darDeAltaCuenta(cuentaDto);
 
+        verify(cuentaDao, times(1)).save(any(Cuenta.class));
+    }
+
+    @Test
+    public void testMetodoSaveFunciona() throws ClienteNoExisteException, CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException{
+        Cliente cliente = new Cliente();
+        cliente.setDni(44882713);
+        cliente.setNombre("Axel");
+        cliente.setApellido("Rust");
+        cliente.setFechaNacimiento(LocalDate.of(2003, 5,30));
+        cliente.setTipoPersona(TipoPersona.PERSONA_FISICA);
+
+        CuentaDto cuentaDto = new CuentaDto();
+        cuentaDto.setTipoCuenta("C");
+        cuentaDto.setMoneda("P");
+        cuentaDto.setDniTitular(cliente.getDni());
+
+        when(cuentaDao.find(anyLong())).thenReturn(null);
+
+        cuentaService.darDeAltaCuenta(cuentaDto);
+
+    // Verifica que el método save sea llamado correctamente
         verify(cuentaDao, times(1)).save(any(Cuenta.class));
     }
 }

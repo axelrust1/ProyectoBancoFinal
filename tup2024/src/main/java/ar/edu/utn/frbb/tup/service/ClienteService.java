@@ -4,6 +4,7 @@ import ar.edu.utn.frbb.tup.controller.ClienteDto;
 import ar.edu.utn.frbb.tup.model.Cliente;
 import ar.edu.utn.frbb.tup.model.Cuenta;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class ClienteService {
         return cliente;
     }
 
-    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws CuentaAlreadyExistsException {
+    public void agregarCuenta(Cuenta cuenta, long dniTitular) throws ClienteNoExisteException, CuentaAlreadyExistsException {
         Cliente titular = buscarClientePorDni(dniTitular);
         cuenta.setTitular(titular.getDni());
         if (titular.tieneCuenta(cuenta.getTipoCuenta(), cuenta.getMoneda())) {
@@ -42,10 +43,10 @@ public class ClienteService {
         clienteDao.save(titular);
     }
 
-    public Cliente buscarClientePorDni(long dni) {
+    public Cliente buscarClientePorDni(long dni) throws ClienteNoExisteException{
         Cliente cliente = clienteDao.find(dni, true);
         if(cliente == null) {
-            throw new IllegalArgumentException("El cliente no existe");
+            throw new ClienteNoExisteException();
         }
         return cliente;
     }

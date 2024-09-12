@@ -4,6 +4,7 @@ import ar.edu.utn.frbb.tup.controller.CuentaDto;
 import ar.edu.utn.frbb.tup.model.*;
 import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.CuentaNoEncontradaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
@@ -47,7 +48,7 @@ public class CuentaServiceTest {
     }
 
     @Test
-    public void testCuentaExistente() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
+    public void testCuentaYaExiste() throws CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cuenta cuentaExistente = new Cuenta();
         CuentaDto cuentaDto = new CuentaDto();
         cuentaDto.setDniTitular(123456789);
@@ -117,6 +118,42 @@ public class CuentaServiceTest {
     }
 
     @Test
+    public void testCuentaAhorroyDolaresCreadaExitosamente() throws ClienteNoExisteException,CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
+        Cliente peperino = new Cliente();
+        peperino.setDni(123456789);
+        peperino.setNombre("Pepe");
+        peperino.setApellido("Rino");
+
+        CuentaDto cuentaDto = new CuentaDto();
+        cuentaDto.setTipoCuenta("A");
+        cuentaDto.setMoneda("D");
+        cuentaDto.setDniTitular(peperino.getDni());
+
+        when(cuentaDao.find(anyLong())).thenReturn(null);
+        cuentaService.darDeAltaCuenta(cuentaDto);
+
+        verify(cuentaDao, times(1)).save(any(Cuenta.class));
+    }
+
+    @Test
+    public void testCuentaCorrienteyPesosCreadaExitosamente() throws ClienteNoExisteException,CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException, ClienteAlreadyExistsException {
+        Cliente peperino = new Cliente();
+        peperino.setDni(123456789);
+        peperino.setNombre("Pepe");
+        peperino.setApellido("Rino");
+
+        CuentaDto cuentaDto = new CuentaDto();
+        cuentaDto.setTipoCuenta("C");
+        cuentaDto.setMoneda("P");
+        cuentaDto.setDniTitular(peperino.getDni());
+
+        when(cuentaDao.find(anyLong())).thenReturn(null);
+        cuentaService.darDeAltaCuenta(cuentaDto);
+
+        verify(cuentaDao, times(1)).save(any(Cuenta.class));
+    }
+
+    @Test
     public void testMetodoSaveFunciona() throws ClienteNoExisteException, CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException{
         Cliente cliente = new Cliente();
         cliente.setDni(44882713);
@@ -136,5 +173,23 @@ public class CuentaServiceTest {
 
     // Verifica que el método save sea llamado correctamente
         verify(cuentaDao, times(1)).save(any(Cuenta.class));
+    }
+
+    @Test
+    void testCuentaEncontrada() throws CuentaNoEncontradaExcepcion {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setNumeroCuenta(1L);
+
+        when(cuentaDao.find(1L)).thenReturn(cuenta);
+
+        assertNotNull(cuentaService.find(1L));
+        assertEquals(1L, cuentaService.find(1L).getNumeroCuenta());
+    }
+
+    @Test
+    void testCuentaNoEncontrada() {
+        when(cuentaDao.find(1L)).thenReturn(null);
+
+        assertThrows(CuentaNoEncontradaExcepcion.class, () -> cuentaService.find(1L));
     }
 }

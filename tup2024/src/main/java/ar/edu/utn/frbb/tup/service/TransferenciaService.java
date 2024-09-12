@@ -45,35 +45,35 @@ public class TransferenciaService {
             throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
         }
         if (transferenciaDto.getCuentaOrigen() == 0 || transferenciaDto.getCuentaDestino() == 0) {
-            throw new CuentasOrigenDestinoNulas();
+            throw new CuentasOrigenDestinoNulas("Las cuentas de origen y destino no pueden ser nulas");
         }
         if (cuenta==null){
-            throw new CuentaOrigenNoExisteExcepcion(); 
+            throw new CuentaOrigenNoExisteExcepcion("La cuenta origen no existe."); 
         }
 
          if (transferenciaDto.getMonto() <= 0) {
-            throw new MontoMenorIgualQueCero();
+            throw new MontoMenorIgualQueCero("El monto debe ser mayor a 0");
         }
         if(cuenta.getBalance()<trans.getMonto()){
-            throw new SaldoInsuficienteExcepcion();
+            throw new SaldoInsuficienteExcepcion("Saldo insuficiente para realizar la transferencia.");
         }
 
         if (cuenta2==null){
-            throw new CuentaDestinoNoExisteExcepcion();
+            throw new CuentaDestinoNoExisteExcepcion("La cuenta de destino no existe.");
         }
         if (transferenciaDto.getCuentaOrigen()==(transferenciaDto.getCuentaDestino())) {
-            throw new CuentaOrigenyDestinoIguales();
+            throw new CuentaOrigenyDestinoIguales("Las cuentas de origen y destino no pueden ser la misma");
         }
         if (!"PESOS".equals(trans.getTipoMoneda()) && !"DOLARES".equals(trans.getTipoMoneda())) {
-            throw new TipoDeMonedaIncorrectoExcepcion();
+           throw new TipoDeMonedaIncorrectoExcepcion("Tipo de moneda "+ trans.getTipoMoneda() + "  es incorrecto");
         }
 
         if(!cuenta.getMoneda().equals(cuenta2.getMoneda())){
-            throw new MonedasDistintasTransferenciaExcepcion();
+            throw new MonedasDistintasTransferenciaExcepcion("Las monedas de las cuentas son distintas.");
         }
 
         if (!TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta.getMoneda()) || !TipoMoneda.valueOf(trans.getTipoMoneda()).equals(cuenta2.getMoneda())){
-            throw new MonedaErroneaTransferenciaExcepcion();
+            throw new MonedaErroneaTransferenciaExcepcion("Error en la moneda seleccionada para la transferencia.");
         }
     
         //aca ya verificamos que las dos cuentas existen, solamente hay que chequear los bancos
@@ -94,7 +94,7 @@ public class TransferenciaService {
             //invocamos el servicio banelco ya que son de distinto banco pero las dos cuentas existen
             boolean aux = banelcoService.realizarTransferenciaDistintoBanco();
             if (aux==false){
-                throw new TranferenciaBanelcoFalladaExcepcion();
+                throw new TranferenciaBanelcoFalladaExcepcion("Transferencia a banco externo erronea. Vuelva a intentarlo");
             } else {
                 cuenta.setBalance(cuenta.getBalance()-trans.getMonto());
                 MovimientoDto movimientoDto = new MovimientoDto(LocalDate.now(), "DEBITO", "Transferencia Saliente", trans.getMonto());

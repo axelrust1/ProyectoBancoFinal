@@ -76,8 +76,6 @@ public class ClienteServiceTest {
         assertThrows(ClienteAlreadyExistsException.class, () -> clienteService.darDeAltaCliente(clienteDto));
     }
 
-
-
     @Test
     public void testAgregarCuentaAClienteSuccess() throws ClienteNoExisteException, CuentaAlreadyExistsException {
         Cliente pepeRino = new Cliente();
@@ -103,7 +101,55 @@ public class ClienteServiceTest {
 
     }
 
+    @Test
+    public void testAgregarCuentaAhorroYDolaresAClienteSucess()throws ClienteNoExisteException, CuentaAlreadyExistsException {
+        Cliente pepeRino = new Cliente();
+        pepeRino.setDni(26456439);
+        pepeRino.setNombre("Pepe");
+        pepeRino.setApellido("Rino");
+        pepeRino.setFechaNacimiento(LocalDate.of(1978, 3,25));
+        pepeRino.setTipoPersona(TipoPersona.PERSONA_FISICA);
 
+        Cuenta cuenta = new Cuenta()
+                .setMoneda(TipoMoneda.DOLARES)
+                .setBalance(500000)
+                .setTipoCuenta(TipoCuenta.CAJA_AHORRO);
+
+        when(clienteDao.find(26456439, true)).thenReturn(pepeRino);
+
+        clienteService.agregarCuenta(cuenta, pepeRino.getDni());
+
+        verify(clienteDao, times(1)).save(pepeRino);
+
+        assertEquals(1, pepeRino.getCuentas().size());
+        assertEquals(pepeRino.getDni(), cuenta.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
+
+    }
+
+    @Test
+    public void testAgregarCuentaCorrientePesosAClienteSucess()throws ClienteNoExisteException, CuentaAlreadyExistsException {
+        Cliente pepeRino = new Cliente();
+        pepeRino.setDni(26456439);
+        pepeRino.setNombre("Pepe");
+        pepeRino.setApellido("Rino");
+        pepeRino.setFechaNacimiento(LocalDate.of(1978, 3,25));
+        pepeRino.setTipoPersona(TipoPersona.PERSONA_FISICA);
+
+        Cuenta cuenta = new Cuenta()
+                .setMoneda(TipoMoneda.PESOS)
+                .setBalance(500000)
+                .setTipoCuenta(TipoCuenta.CUENTA_CORRIENTE);
+
+        when(clienteDao.find(26456439, true)).thenReturn(pepeRino);
+
+        clienteService.agregarCuenta(cuenta, pepeRino.getDni());
+
+        verify(clienteDao, times(1)).save(pepeRino);
+
+        assertEquals(1, pepeRino.getCuentas().size());
+        assertEquals(pepeRino.getDni(), cuenta.getTitular());//comparo el dni ya que cambiamos el titular solo por el numero del dni y no el objeto entero
+
+    }
     @Test
     public void testAgregarCuentaAClienteDuplicada() throws ClienteNoExisteException, CuentaAlreadyExistsException {
         Cliente luciano = new Cliente();
@@ -218,7 +264,7 @@ public void testBuscarDniExitoso()  throws ClienteNoExisteException{
 }
 
 @Test
-    public void testBuscarPorDniFallo() throws ClienteAlreadyExistsException{
+    public void testBuscarPorDniFallo() throws ClienteNoExisteException{
         Cliente peperino = new Cliente();
         peperino.setDni(26456439);
         peperino.setNombre("Pepe");
@@ -226,6 +272,6 @@ public void testBuscarDniExitoso()  throws ClienteNoExisteException{
         peperino.setFechaNacimiento(LocalDate.of(1978, 3,25));
         peperino.setTipoPersona(TipoPersona.PERSONA_FISICA);
 
-        assertThrows(IllegalArgumentException.class, () -> clienteService.buscarClientePorDni(123456789));
+        assertThrows(ClienteNoExisteException.class, () -> clienteService.buscarClientePorDni(123456789));
     }
 }

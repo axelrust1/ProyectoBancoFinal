@@ -1,8 +1,13 @@
 package ar.edu.utn.frbb.tup.controller.handler;
 
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
+import ar.edu.utn.frbb.tup.model.exception.FormatoFechaIncorrectoException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.ClienteAlreadyExistsException;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
+import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
+import ar.edu.utn.frbb.tup.model.exception.TipoDePersonaIncorrectoExcepcion;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,7 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class TupResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
-            = {ClienteNoExisteException.class, CuentaAlreadyExistsException.class, CuentaNoSoportadaException.class, IllegalArgumentException.class})
+            = {ClienteNoExisteException.class,TipoDePersonaIncorrectoExcepcion.class,FormatoFechaIncorrectoException.class,  TipoDeMonedaIncorrectoExcepcion.class, ClienteAlreadyExistsException.class, CuentaAlreadyExistsException.class, CuentaNoSoportadaException.class, IllegalArgumentException.class})
     protected ResponseEntity<Object> handleMateriaNotFound(
             Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();

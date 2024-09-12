@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
 import ar.edu.utn.frbb.tup.model.exception.ClienteNoExisteException;
 import ar.edu.utn.frbb.tup.model.exception.CuentaAlreadyExistsException;
+import ar.edu.utn.frbb.tup.model.exception.CuentaNoEncontradaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.CuentaNoSoportadaException;
 import ar.edu.utn.frbb.tup.persistence.CuentaDao;
 import ar.edu.utn.frbb.tup.persistence.ClienteDao;
@@ -23,11 +24,11 @@ public class CuentaService {
     public Cuenta darDeAltaCuenta(CuentaDto cuentaDto) throws ClienteNoExisteException, CuentaAlreadyExistsException, CuentaAlreadyExistsException, CuentaNoSoportadaException {
         Cuenta cuenta = new Cuenta(cuentaDto);
         if(cuentaDao.find(cuenta.getTitular()) != null) {
-            throw new CuentaAlreadyExistsException();
+            throw new CuentaAlreadyExistsException("El cliente ya tiene una cuenta de este tipo");
         }
 
        if (!tipoCuentaEstaSoportada(cuenta)) {
-            throw new CuentaNoSoportadaException(cuenta);
+            throw new CuentaNoSoportadaException("El tipo de cuenta " + cuenta.getTipoCuenta() + " con " + cuenta.getMoneda() + " no esta soportada.");
        }
         clienteService.agregarCuenta(cuenta, cuentaDto.getDniTitular());
         cuentaDao.save(cuenta);
@@ -39,7 +40,10 @@ public class CuentaService {
         return (cuenta.getTipoCuenta() == TipoCuenta.CUENTA_CORRIENTE && cuenta.getMoneda() == TipoMoneda.PESOS) || (cuenta.getTipoCuenta() == TipoCuenta.CAJA_AHORRO && (cuenta.getMoneda() == TipoMoneda.PESOS || cuenta.getMoneda() == TipoMoneda.DOLARES));
     }
 
-    public Cuenta find(long id) {
+    public Cuenta find(long id) throws CuentaNoEncontradaExcepcion  {
+        if (cuentaDao.find(id)==null){
+            throw new CuentaNoEncontradaExcepcion("Cuenta no encontrada");
+        }
         return cuentaDao.find(id);
     }
 }

@@ -4,7 +4,7 @@ package ar.edu.utn.frbb.tup.controller;
 public class TransferenciaDto {
     private long cuentaOrigen;
     private long cuentaDestino;
-    int monto;
+    double monto;
     String moneda;
 
     public long getCuentaOrigen(){
@@ -23,11 +23,11 @@ public class TransferenciaDto {
         this.cuentaDestino=cuentaDestino;
     }
 
-    public int getMonto(){
+    public double getMonto(){
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
 

@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.model;
 
 import java.time.LocalDate;
 import java.util.Random;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ar.edu.utn.frbb.tup.controller.CuentaDto;
@@ -14,7 +14,7 @@ public class Cuenta {
     TipoCuenta tipoCuenta;
     long titular;
     TipoMoneda moneda;
-    private Set<Movimiento> movimientos = new HashSet<>();
+    private Set<Movimiento> movimientos = new LinkedHashSet<>();
    
 
     public Cuenta() {

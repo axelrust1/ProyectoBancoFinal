@@ -3,7 +3,7 @@ package ar.edu.utn.frbb.tup.model;
 import ar.edu.utn.frbb.tup.controller.ClienteDto;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Cliente extends Persona{
@@ -11,7 +11,7 @@ public class Cliente extends Persona{
     private TipoPersona tipoPersona;
     private String banco;
     private LocalDate fechaAlta;
-    private Set<Cuenta> cuentas = new HashSet<>();
+    private Set<Cuenta> cuentas = new LinkedHashSet<>(); //para que se guarden en orden segun cuadno los guardaron
 
     public Cliente() {
         super();

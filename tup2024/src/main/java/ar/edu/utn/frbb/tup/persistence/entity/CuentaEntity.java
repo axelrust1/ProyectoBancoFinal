@@ -6,6 +6,7 @@ import ar.edu.utn.frbb.tup.model.TipoCuenta;
 import ar.edu.utn.frbb.tup.model.TipoMoneda;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.time.LocalDate;
 
@@ -27,7 +28,7 @@ public class CuentaEntity extends BaseEntity{
         this.titular = cuenta.getTitular();
         this.fechaCreacion = cuenta.getFechaCreacion();
         this.moneda = cuenta.getMoneda().toString();
-        this.movimientos = new HashSet<>();//agrego un hash set para almarcenar los movimientos en cada cuenta
+        this.movimientos = new LinkedHashSet<>();//agrego un linked hash set para almarcenar los movimientos en cada cuenta en orden
     }
 
     public Cuenta toCuenta() {

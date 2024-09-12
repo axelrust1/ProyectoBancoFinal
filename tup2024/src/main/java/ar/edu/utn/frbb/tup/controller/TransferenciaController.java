@@ -17,7 +17,6 @@ import ar.edu.utn.frbb.tup.model.exception.MonedaErroneaTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MonedasDistintasTransferenciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
-import ar.edu.utn.frbb.tup.model.exception.NoAlcanzaException;
 import ar.edu.utn.frbb.tup.model.exception.SaldoInsuficienteExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.TranferenciaBanelcoFalladaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
@@ -69,7 +68,7 @@ public class TransferenciaController {
             depositoRetiroValidator.validate(depositoRetiroDto);
             depositoRetiroService.realizarRetiro(depositoRetiroDto);
             return new TransferMensaje("EXITOSO", "Retiro Exitoso");
-        } catch (TipoDeMonedaIncorrectoExcepcion | NoAlcanzaException | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
+        } catch (TipoDeMonedaIncorrectoExcepcion | SaldoInsuficienteExcepcion | CuentaOrigenNoExisteExcepcion | MonedaErroneaTransferenciaExcepcion | CuentaNulaExcepcion | MonedaVaciaExcepcion | MontoMenorIgualQueCero excepcion ){
             return new TransferMensaje("FALLIDA", excepcion.getMessage());
         }
     }

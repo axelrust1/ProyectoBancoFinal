@@ -5,7 +5,7 @@ import ar.edu.utn.frbb.tup.controller.DepositoRetiroDto;
 public class DepositoRetiro {
 
     private long cuenta;
-    private int monto;
+    private double monto;
     private String tipoMoneda;
 
     public DepositoRetiro(DepositoRetiroDto DepositoRetirodto){
@@ -22,11 +22,11 @@ public class DepositoRetiro {
         this.cuenta = cuenta;
     }
 
-    public int getMonto() {
+    public double getMonto() {
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
 

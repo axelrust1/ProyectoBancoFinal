@@ -4,7 +4,7 @@ import ar.edu.utn.frbb.tup.controller.TransferenciaDto;
 public class Transferencia {
     private long cuentaOrigen;
     private long cuentaDestino;
-    private int monto;
+    private double monto;
     private String tipoMoneda;
 
     public Transferencia(TransferenciaDto transferenciaDto){
@@ -30,11 +30,11 @@ public class Transferencia {
         this.cuentaDestino = cuentaDestino;
     }
 
-    public int getMonto() {
+    public double getMonto() {
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
 

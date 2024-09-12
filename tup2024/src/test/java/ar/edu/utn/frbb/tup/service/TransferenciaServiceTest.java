@@ -183,6 +183,44 @@ public class TransferenciaServiceTest {
     }
 
     @Test
+    public void testTransfenciaBanelcoExitosa() throws TipoDeMonedaIncorrectoExcepcion, MonedaVaciaExcepcion, CuentaOrigenyDestinoIguales, MontoMenorIgualQueCero, CuentasOrigenDestinoNulas, CuentaOrigenNoExisteExcepcion, CuentaDestinoNoExisteExcepcion, MonedasDistintasTransferenciaExcepcion, MonedaErroneaTransferenciaExcepcion,  SaldoInsuficienteExcepcion, TranferenciaBanelcoFalladaExcepcion {
+        Cliente cliente1 = new Cliente();
+        cliente1.setBanco("BancoNacion");
+        cliente1.setDni(44882713);
+        Cliente cliente2 = new Cliente();
+        cliente2.setDni(44882712);
+        cliente2.setBanco("BancoProvincia");
+        Cuenta cuentaOrigen = new Cuenta();
+        cuentaOrigen.setTitular(cliente1.getDni());
+        cuentaOrigen.setNumeroCuenta(1L);
+        cuentaOrigen.setMoneda(TipoMoneda.fromString("P"));
+        cuentaOrigen.setBalance(5000);
+        cliente1.addCuenta(cuentaOrigen);
+        Cuenta cuentaDestino = new Cuenta();
+        cuentaDestino.setTitular(cliente2.getDni());
+        cuentaDestino.setNumeroCuenta(2L);
+        cuentaDestino.setMoneda(TipoMoneda.fromString("P"));
+        cuentaDestino.setBalance(10000);
+        cliente2.addCuenta(cuentaDestino);
+
+        TransferenciaDto transferenciaDto = new TransferenciaDto();
+        transferenciaDto.setCuentaOrigen(1L);
+        transferenciaDto.setCuentaDestino(2L);
+        transferenciaDto.setMoneda("PESOS");
+        transferenciaDto.setMonto(2000);
+
+        when(clienteDao.find(eq(44882713L), eq(true))).thenReturn(cliente1);
+        when(clienteDao.find(eq(44882712L), eq(true))).thenReturn(cliente2);
+        when(cuentaDao.find(1L)).thenReturn(cuentaOrigen);
+        when(cuentaDao.find(2L)).thenReturn(cuentaDestino);
+        when(banelcoService.realizarTransferenciaDistintoBanco()).thenReturn(true);
+
+        transferenciaService.realizarTransferencia(transferenciaDto);
+        assertEquals(3000, cuentaOrigen.getBalance()); 
+        assertEquals(12000, cuentaDestino.getBalance()); 
+    }
+
+    @Test
     public void testCuentasOrigenDestinoNulas() {
         TransferenciaDto transferenciaDto = new TransferenciaDto();
         transferenciaDto.setCuentaOrigen(0);

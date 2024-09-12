@@ -10,18 +10,25 @@ import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 @Component
 public class DepositoRetiroValidator {
     public void validate(DepositoRetiroDto depositoRetiroDto) throws CuentaNulaExcepcion, MontoMenorIgualQueCero, MonedaVaciaExcepcion {
-        if (depositoRetiroDto.getCuenta() == 0 || depositoRetiroDto.getCuenta() == 0) {
-            throw new CuentaNulaExcepcion();
-        }
+        validateCuentaNula(depositoRetiroDto);
+        validateMoneda(depositoRetiroDto);
+        validateMonto(depositoRetiroDto);
         
-        if (depositoRetiroDto.getMonto() <= 0) {
-            throw new MontoMenorIgualQueCero();
+    }
+    private void validateCuentaNula(DepositoRetiroDto depositoRetiroDto) throws CuentaNulaExcepcion{
+        if (depositoRetiroDto.getCuenta() == 0 || depositoRetiroDto.getCuenta() == 0) {
+            throw new CuentaNulaExcepcion("La cuenta no puede ser nula.");
         }
-
+    }
+    private void validateMonto(DepositoRetiroDto depositoRetiroDto) throws MontoMenorIgualQueCero{
+        if (depositoRetiroDto.getMonto() <= 0) {
+            throw new MontoMenorIgualQueCero("El monto debe ser mayor a 0");
+        }
+    }
+    private void validateMoneda(DepositoRetiroDto depositoRetiroDto) throws MonedaVaciaExcepcion{
         if (depositoRetiroDto.getMoneda() == null || depositoRetiroDto.getMoneda().isEmpty()) {
             throw new MonedaVaciaExcepcion("La moneda no puede ser vacia");
         }
-        
     }
 }
 

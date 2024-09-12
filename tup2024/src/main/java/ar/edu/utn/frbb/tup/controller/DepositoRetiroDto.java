@@ -2,7 +2,7 @@ package ar.edu.utn.frbb.tup.controller;
 
 public class DepositoRetiroDto {
     private long cuenta;
-    int monto;
+    double monto;
     String moneda;
 
     public long getCuenta(){
@@ -12,11 +12,11 @@ public class DepositoRetiroDto {
     public void setCuenta(long cuenta){
         this.cuenta=cuenta;
     }
-    public int getMonto(){
+    public double getMonto(){
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(double monto) {
         this.monto = monto;
     }
 

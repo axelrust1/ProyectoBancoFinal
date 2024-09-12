@@ -7,7 +7,6 @@ import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

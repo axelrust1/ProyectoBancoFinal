@@ -79,7 +79,7 @@ public class TransferenciaService {
         //aca ya verificamos que las dos cuentas existen, solamente hay que chequear los bancos
         Cliente cliente = clienteDao.find(cuenta.getTitular(), true); //creamos los clientes para evaluar si los bancos son los mismos
         Cliente cliente2 = clienteDao.find(cuenta2.getTitular(), true);
-        if (cliente.getBanco().toLowerCase().equals((cliente2.getBanco().toLowerCase()))){ //lo paso todo a minuscula asi lo compara bien
+        if (cliente.getBanco().toLowerCase().trim().equals((cliente2.getBanco().toLowerCase().trim()))){ //lo paso todo a minuscula asi lo compara bien
                     cuenta.setBalance(cuenta.getBalance()-trans.getMonto());
                     MovimientoDto movimientoDto = new MovimientoDto(LocalDate.now(), "DEBITO", "Transferencia Saliente", trans.getMonto());
                     cuenta2.setBalance(cuenta2.getBalance()+(trans.getMonto()-recargo(transferenciaDto))); //calculo recargo

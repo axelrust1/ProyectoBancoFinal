@@ -38,11 +38,5 @@ public class TransferenciaDto {
     public void setMoneda(String moneda) {
         this.moneda = moneda;
     }
-
-    @Override
-    public String toString() {
-        return "TransferenciaDto [cuentaOrigen=" + cuentaOrigen + ", cuentaDestino=" + cuentaDestino + ", monto="
-                + monto + ", moneda=" + moneda + "]";
-    }
     
 }

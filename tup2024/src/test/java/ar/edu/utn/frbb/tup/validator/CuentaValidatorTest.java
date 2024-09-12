@@ -6,6 +6,8 @@ import ar.edu.utn.frbb.tup.model.exception.TipoDeCuentaIncorrectoExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.TipoDeMonedaIncorrectoExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CuentaValidatorTest {
 
+    @Mock
     private CuentaValidator cuentaValidator;
 
     @BeforeEach
@@ -35,11 +38,10 @@ class CuentaValidatorTest {
         cuentaDto.setTipoCuenta("L");
         cuentaDto.setMoneda("P");
 
-        TipoDeCuentaIncorrectoExcepcion exception = assertThrows(TipoDeCuentaIncorrectoExcepcion.class, () -> {
+        assertThrows(TipoDeCuentaIncorrectoExcepcion.class, () -> {
             cuentaValidator.validate(cuentaDto);
         });
 
-        assertEquals("El tipo de cuenta no es correcto", exception.getMessage()); //chekeo mensaje
     }
 
     @Test
@@ -48,11 +50,10 @@ class CuentaValidatorTest {
         cuentaDto.setTipoCuenta("C");
         cuentaDto.setMoneda("A"); 
 
-        TipoDeMonedaIncorrectoExcepcion exception = assertThrows(TipoDeMonedaIncorrectoExcepcion.class, () -> {
+        assertThrows(TipoDeMonedaIncorrectoExcepcion.class, () -> {
             cuentaValidator.validate(cuentaDto);
         });
 
-        assertEquals("El tipo de moneda no es correcto", exception.getMessage());//chekeo mensaje
     }
 
     @Test

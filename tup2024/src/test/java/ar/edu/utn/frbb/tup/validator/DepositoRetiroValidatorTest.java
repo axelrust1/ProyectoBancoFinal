@@ -7,11 +7,15 @@ import ar.edu.utn.frbb.tup.model.exception.MonedaVaciaExcepcion;
 import ar.edu.utn.frbb.tup.model.exception.MontoMenorIgualQueCero;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DepositoRetiroValidatorTest {
 
+    @Mock
     private DepositoRetiroValidator depositoRetiroValidator;
 
     @BeforeEach
@@ -24,7 +28,7 @@ public class DepositoRetiroValidatorTest {
         DepositoRetiroDto depositoRetiroDto = new DepositoRetiroDto();
         depositoRetiroDto.setCuenta(0);
 
-        assertThrows(CuentaNulaExcepcion.class, () -> {
+        assertThrows(CuentaNulaExcepcion.class, () -> { //aseguro que se lanze la excepcion
             depositoRetiroValidator.validate(depositoRetiroDto);
         });
     }
@@ -36,7 +40,7 @@ public class DepositoRetiroValidatorTest {
         depositoRetiroDto.setMoneda("P");
         depositoRetiroDto.setMonto(0);
 
-        assertThrows(MontoMenorIgualQueCero.class, () -> {
+        assertThrows(MontoMenorIgualQueCero.class, () -> { //aseguro que se lanze la excepcion
             depositoRetiroValidator.validate(depositoRetiroDto);
         });
     }
@@ -48,7 +52,7 @@ public class DepositoRetiroValidatorTest {
         depositoRetiroDto.setMonto(1000.00);
         depositoRetiroDto.setMoneda("");  
 
-        assertThrows(MonedaVaciaExcepcion.class, () -> {
+        assertThrows(MonedaVaciaExcepcion.class, () -> { //aseguro que se lanze la excepcion
             depositoRetiroValidator.validate(depositoRetiroDto);
         });
     }
@@ -60,7 +64,7 @@ public class DepositoRetiroValidatorTest {
         depositoRetiroDto.setMonto(1000.00);
         depositoRetiroDto.setMoneda("P");
 
-        depositoRetiroValidator.validate(depositoRetiroDto);
+        assertDoesNotThrow(() -> depositoRetiroValidator.validate(depositoRetiroDto));
     }
 }
 

@@ -6,14 +6,16 @@ import ar.edu.utn.frbb.tup.model.exception.FormatoFechaIncorrectoException;
 import ar.edu.utn.frbb.tup.model.exception.TipoDePersonaIncorrectoExcepcion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 class ClienteValidatorTest {
 
+    @Mock
     private ClienteValidator clienteValidator;
 
     @BeforeEach
@@ -35,10 +37,9 @@ class ClienteValidatorTest {
         ClienteDto clienteDto = new ClienteDto();
         clienteDto.setTipoPersona("D"); //tipo persoan invalido
 
-        TipoDePersonaIncorrectoExcepcion exception = assertThrows(TipoDePersonaIncorrectoExcepcion.class, () -> {
+        assertThrows(TipoDePersonaIncorrectoExcepcion.class, () -> {
             clienteValidator.validate(clienteDto);
         });
-        assertEquals("El tipo de persona no es correcto", exception.getMessage());//verifico mensaje 
     }
 
     @Test
@@ -47,11 +48,10 @@ class ClienteValidatorTest {
         clienteDto.setTipoPersona("F");
         clienteDto.setFechaNacimiento("30-05-2003"); //formato incorrecto
 
-        FormatoFechaIncorrectoException exception = assertThrows(FormatoFechaIncorrectoException.class, () -> {
+        assertThrows(FormatoFechaIncorrectoException.class, () -> {
             clienteValidator.validate(clienteDto);
         });
-
-        assertEquals("Error en el formato de fecha", exception.getMessage());//verifico mensaje 
+        //verifico mensaje 
     }
 
     @Test

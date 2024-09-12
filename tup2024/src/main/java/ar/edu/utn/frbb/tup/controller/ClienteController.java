@@ -28,8 +28,8 @@ public class ClienteController {
 
     @PostMapping
     public Cliente crearCliente(@RequestBody ClienteDto clienteDto) throws ClienteAlreadyExistsException, TipoDePersonaIncorrectoExcepcion, FormatoFechaIncorrectoException {
-        clienteValidator.validate(clienteDto);
-        return clienteService.darDeAltaCliente(clienteDto);
+        clienteValidator.validate(clienteDto); //validamos 
+        return clienteService.darDeAltaCliente(clienteDto);//si no hay excepcion retornamos el cliente
     }
 
     @GetMapping("/{dni}")
